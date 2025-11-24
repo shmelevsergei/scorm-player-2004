@@ -101,15 +101,6 @@ const progress: SCORMState = {
 };
 ```
 
-## Build and publish
-
-```bash
-npm install
-npm run build
-npm login
-npm publish --access public
-```
-
 ## Features
 
 -   Supports SCORM 2004 API (API_1484_11)
