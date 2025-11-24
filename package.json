@@ -1,0 +1,36 @@
+{
+	"name": "scorm-player",
+	"version": "1.0.0",
+	"description": "SCORM 2004 player module for Next.js and other frameworks, with backend unpacking and SCORM API support.",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"build": "tsup src/index.ts --format cjs,esm --dts --out-dir dist",
+		"clean": "rm -rf dist"
+	},
+	"keywords": [
+		"scorm",
+		"scorm2004",
+		"nextjs",
+		"react",
+		"player",
+		"elearning"
+	],
+	"author": "Shmelev Sergei",
+	"license": "MIT",
+	"dependencies": {
+		"jszip": "^3.10.1",
+		"@supabase/supabase-js": "^2.9.0"
+	},
+	"peerDependencies": {
+		"react": "^18.0.0",
+		"react-dom": "^18.0.0"
+	},
+	"devDependencies": {
+		"tsup": "^7.3.0",
+		"typescript": "^5.2.0"
+	}
+}
