@@ -1,5 +1,5 @@
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
-import { randomUUID } from "crypto";
+import { v4 as uuidv4 } from "uuid";
 
 export class SupabaseAdapter {
 	client: SupabaseClient;
@@ -16,8 +16,7 @@ export class SupabaseAdapter {
 
 	// Генерация уникального имени папки
 	generateUniqueFolder(baseName: string): string {
-		const id = randomUUID(); // Node.js >= 14.17
-		return `${baseName}-${id}`;
+		return `${baseName}-${uuidv4()}`;
 	}
 
 	async uploadFile(path: string, content: string | Buffer) {
