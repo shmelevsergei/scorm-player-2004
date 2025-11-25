@@ -3,9 +3,9 @@ import { SCORMState } from "../types/scorm";
 
 interface ScormPlayerProps {
 	launchUrl: string;
-	userId: string;
-	courseId: string;
-	lessonId: string;
+	userId?: string;
+	courseId?: string;
+	lessonId?: string;
 	saveProgress: (data: SCORMState) => void;
 }
 
