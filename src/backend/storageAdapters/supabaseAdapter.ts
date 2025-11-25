@@ -1,4 +1,5 @@
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
+import { randomUUID } from "crypto";
 
 export class SupabaseAdapter {
 	client: SupabaseClient;
@@ -13,6 +14,12 @@ export class SupabaseAdapter {
 		this.rootFolder = rootFolder;
 	}
 
+	// Генерация уникального имени папки
+	generateUniqueFolder(baseName: string): string {
+		const id = randomUUID(); // Node.js >= 14.17
+		return `${baseName}-${id}`;
+	}
+
 	async uploadFile(path: string, content: string | Buffer) {
 		const fullPath = `${this.rootFolder}/${path}`;
 		await this.client.storage
@@ -21,18 +28,32 @@ export class SupabaseAdapter {
 		return fullPath;
 	}
 
+	// Принимаем files и optional baseName для папки
 	async uploadFolder(
-		folderPath: string,
-		files: Record<string, string | Buffer>
-	) {
+		files: Record<string, string | Buffer>,
+		baseFolderName: string = "course"
+	): Promise<string> {
+		// Генерируем уникальное имя папки
+		const uniqueFolder = this.generateUniqueFolder(baseFolderName);
+
 		for (const [filePath, content] of Object.entries(files)) {
-			const fullPath = `${folderPath}/${filePath}`;
+			const fullPath = `${uniqueFolder}/${filePath}`;
 			await this.uploadFile(fullPath, content);
 		}
+
+		// Возвращаем уникальное имя папки
+		return uniqueFolder;
 	}
 
+	// Получаем публичный URL полного пути к файлу
 	getFileUrl(path: string): string {
 		return this.client.storage.from(this.rootFolder).getPublicUrl(path).data
 			.publicUrl;
+	}
+
+	// Удобная функция для получения URL к launch файлу
+	getLaunchUrl(folderName: string, launchPath: string): string {
+		const fullPath = `${folderName}/${launchPath}`;
+		return this.getFileUrl(fullPath);
 	}
 }
