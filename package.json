@@ -1,6 +1,6 @@
 {
 	"name": "scorm-player",
-	"version": "1.2.2",
+	"version": "1.2.4",
 	"description": "SCORM 2004 player, unpacker and manifest parser for Node.js / Next.js with storage adapters and React iframe renderer.",
 	"main": "dist/index.js",
 	"module": "dist/index.mjs",

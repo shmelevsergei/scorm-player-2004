@@ -1,8 +1,7 @@
-// src/backend/unpackSCORM.ts
 import JSZip from "jszip";
 
 export interface ParsedSCORM {
-	files: Record<string, string>;
+	files: Record<string, string | Buffer>;
 	manifestXml: string;
 }
 
@@ -10,13 +9,35 @@ export async function unpackSCORM(
 	zipData: Buffer | Uint8Array
 ): Promise<ParsedSCORM> {
 	const zip = await JSZip.loadAsync(zipData);
-	const files: Record<string, string> = {};
+	const files: Record<string, string | Buffer> = {};
 
 	for (const filename of Object.keys(zip.files)) {
 		const file = zip.files[filename];
-
 		if (!file) continue;
-		const content = await file.async("string");
+
+		// Если это папка — пропускаем
+		if (file.dir) continue;
+
+		// Определяем бинарный или текстовый файл по расширению
+		const ext = filename.split(".").pop()?.toLowerCase() || "";
+		const binaryExts = [
+			"jpg",
+			"jpeg",
+			"png",
+			"gif",
+			"svg",
+			"ico",
+			"woff",
+			"woff2",
+			"ttf",
+			"mp3",
+			"mp4",
+		];
+
+		const content = binaryExts.includes(ext)
+			? await file.async("nodebuffer") // бинарные файлы
+			: await file.async("string"); // текстовые файлы
+
 		files[filename] = content;
 	}
 
@@ -24,6 +45,10 @@ export async function unpackSCORM(
 	if (!manifestXml) {
 		throw new Error("imsmanifest.xml not found in SCORM package");
 	}
-
-	return { files, manifestXml };
+	// Приводим к string
+	if (Buffer.isBuffer(manifestXml)) {
+		return { files, manifestXml: manifestXml.toString("utf-8") };
+	} else {
+		return { files, manifestXml };
+	}
 }
