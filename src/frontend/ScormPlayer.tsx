@@ -42,6 +42,6 @@ export function ScormPlayer({
 	}, [scormState, saveProgress]);
 
 	return (
-		<iframe ref={iframeRef} src={launchUrl} width='100%' height='600px' />
+		<iframe ref={iframeRef} src={launchUrl} width='100%' height='100%' />
 	);
 }
