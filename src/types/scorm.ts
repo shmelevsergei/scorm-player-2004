@@ -5,4 +5,8 @@ export interface SCORMState {
 	"cmi.score.raw"?: number;
 	"cmi.progress_measure"?: number;
 	"cmi.suspend_data"?: string;
+	"cmi.score.max"?: number;
+	"cmi.score.min"?: number;
+	"cmi.score.scaled"?: number;
+	"cmi.exit"?: string;
 }
